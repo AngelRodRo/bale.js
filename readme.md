@@ -1,4 +1,4 @@
-Bale.js is a seeder where you can create data for any models or collections in any db engine like MongoDB, MySQL, Postgres, etc. (Current version: Only Support MongoDB).
+Bale.js is a seeder where you can create data for any models or collections in any database engine like MongoDB, MySQL, Postgres, etc. (Current version: Only Supports MongoDB).
 
 
 ## Installation
@@ -11,7 +11,7 @@ npm install --save bale.js
 ## Features
 
 - Generate seeds from any data model
-- Connection for any db engine (SQL or NoSQL): MongoDB, Postgres, Mysql
+- Connection for any database engine (SQL or NoSQL): MongoDB, Postgres, Mysql. (Current Version: Only Supports MongoDB)
 
 ## Usage 
 
