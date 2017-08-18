@@ -48,7 +48,7 @@ IndexSeeder.js
     let opts = {
         host:'localhost',
         port:27017,
-        dbname:'miclasedb',
+        dbname:'dbname',
         driver:'mongodb'
     }
 
