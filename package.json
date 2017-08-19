@@ -1,7 +1,7 @@
 {
   "name": "bale.js",
-  "version": "1.0.5",
-  "description": "Generator of seeder for populate a DB in Mongodb",
+  "version": "1.0.7",
+  "description": "Seeder for populate a DB in Mongodb",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,7 +9,8 @@
   "keywords": [
     "seeders",
     "db",
-    "mongodb"
+    "mongodb",
+    "nodejs"
   ],
   "author": "angelrodro",
   "license": "ISC",
