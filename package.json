@@ -1,6 +1,6 @@
 {
   "name": "bale.js",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Seeder for populate a DB in Mongodb",
   "main": "index.js",
   "scripts": {
