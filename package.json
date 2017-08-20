@@ -1,7 +1,7 @@
 {
   "name": "bale.js",
-  "version": "1.0.8",
-  "description": "Seeder for populate a DB in Mongodb",
+  "version": "1.0.9",
+  "description": "Seeder for populate a DB in Mongodb,MySQL or Postgres",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,5 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "mongodb": "^2.2.31"
+  },
+  "repository" : { 
+     "type" : "git", 
+     "url" : "https://github.com/AngelRodRo/bale.js"
   }
 }
