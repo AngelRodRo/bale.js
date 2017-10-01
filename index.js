@@ -1,8 +1,8 @@
-'use strict';
-let DBW = require('./dbw');
+"use strict";
+let DBW = require("./dbw");
 
 class Bale{
-    constructor(){
+    constructor() {
         this.names = []; 
         this.relations = [];
         this.seeds = [];
@@ -18,94 +18,80 @@ class Bale{
         this.dfPK = "_id";
     }
 
-    connect(opts){
-        let dbw = new DBW(opts); 
-        return dbw.connect().then((dbw)=>{ 
+    connect(opts) {
+        console.log(opts);
+        const dbw = new DBW(opts); 
+        return dbw.connect().then((dbw) => { 
             this.dbw = dbw;
             return this; 
         });      
     }
 
-    use(seeder){
-        let exports = seeder;
-        
+    use(seeder) {
+        const exports = seeder;
         this.relations.push(exports.relation)
         this.seeds.push(seeder.seeds);
         this.names.push(exports.name);
     }
 
-
-    seed(){
-        
-        return new Promise((resolve,reject)=>{
-
+    seed() {
+        return new Promise((resolve, reject) => {
             let self = this;
             function runGenerator(generator) {
-
-                generator.then((values)=>{
+                generator.then((values) => {
                     it.next(values)
                 });
             }
     
-            function *main (){
+            function *main() {
                 let generatedSeeds = {};
-                
-                for (var i = 0; i < self.seeds.length; i++) {
-                
+                for (let i = 0; i < self.seeds.length; i++) {
                     let generator = [];
                     if(self.relations[i]){
                         let ids = generatedSeeds[self.relations[i]];
-                        
-                        for (var j = 0; j < self.seeds[i].length; j++) {
+                        for (let j = 0; j < self.seeds[i].length; j++) {
                             let randIndex = Math.floor((Math.random()*(ids.length-1)) + 0);
                             self.seeds[i][j][self.relations[i]+"Id"] = ids[randIndex];
                             generator.push(self.createGenerator(self.names[i],self.seeds[i][j]))                                
                         }
-    
                     }else{
-                        for (var j = 0; j < self.seeds[i].length; j++) {
+                        for (let j = 0; j < self.seeds[i].length; j++) {
                             generator.push(self.createGenerator(self.names[i],self.seeds[i][j]))                                
                         }
                     }
                     generatedSeeds[self.names[i]] = yield runGenerator(Promise.all(generator));
                 }
-
                 resolve();
             }
-    
-            var it = main();
+            let it = main();
             it.next(); 
         });
-        
     }
 
-    genSeed(name,count,document,...opts){
-        
-        let [relation] = opts;
-
+    genSeed(name, count, document, ...opts) {
+        const [relation] = opts;
 
         for (let i = 0; i < count; i++) {
             let obj = document({});
             this.seeds.push(obj);
         }
         return {
-            name: name,
+            name,
             seeds : this.seeds,
-            relation: relation
+            relation
         }
     }
 
-    createGenerator(name,obj){
-        return this.dbw.resource(name).insert(obj).then((result)=>result.insertedIds[0]).catch(e=>{console.log(e)});
+    createGenerator(name,obj) {
+        return this.dbw.resource(name).insert(obj).then(result => result.insertedIds[0]).catch( e => { console.log(e) });
     }
 
-    exports (){
+    exports() {
         return {
             name: this.name,
             seeds : this.seeds
         }
     }
 }
-
 
 module.exports = Bale;

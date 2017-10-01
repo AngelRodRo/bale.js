@@ -15,7 +15,9 @@
   "author": "angelrodro",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "^2.2.31"
+    "faker": "^4.1.0",
+    "mongodb": "^2.2.31",
+    "pg": "^7.3.0"
   },
   "repository": {
     "type": "git",

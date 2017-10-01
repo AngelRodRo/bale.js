@@ -1,7 +1,12 @@
 
 module.exports = function(config){
 
-    let driver = config.driver;
+    const driver = config.driver;
+
+    if (!driver) {
+        throw "Need declare the db driver, before continue";
+    }
+
     let db = "";
     let resourceName = "";
 
@@ -41,8 +46,13 @@ module.exports = function(config){
     const mongo = () => {
         const mongodb = require("mongodb");
         const MongoClient = mongodb.MongoClient;
-        const url = `mongodb://${config.host}:${config.port}/${config.dbname}`;
-        
+        let credentials = "";
+
+        if (config.user && config.password) {
+            credentials = `${config.user}:${config.password}@`;
+        }
+        const url = `mongodb://${credentials}${config.host}:${config.port}/${config.dbname}`;
+
         return function(){
             return new Promise((resolve,reject)=>{
                 MongoClient.connect(url,function(err,db){
@@ -60,14 +70,13 @@ module.exports = function(config){
 
     const postgres = () => {
         const { Client } = require("pg");
-        const client = new Client();
 
         const client = new Client({
             user: config.user,
             host: config.host,
             database: config.dbname,
             password: config.password,
-            port: config.port,
+            port: config.port
         });
 
         return function() {
