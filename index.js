@@ -19,7 +19,6 @@ class Bale{
     }
 
     connect(opts) {
-        console.log(opts);
         const dbw = new DBW(opts); 
         return dbw.connect().then((dbw) => { 
             this.dbw = dbw;
