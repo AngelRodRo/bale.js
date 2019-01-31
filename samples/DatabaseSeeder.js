@@ -1,13 +1,13 @@
 "use strict";
 const userSeeder = require("./UserSeeder");
-const Bale = require("../index");  
+const Bale = require("../src/index");  
 const opts = {};
 
 const bale = new Bale();
 
-bale.connect(opts).then((seeder)=>{
-    seeder.use(userSeeder);
-    seeder.seed().then((msg) => {
+bale.connect(opts).then(()=>{
+    bale.use(userSeeder);
+    bale.seed().then(() => {
         process.exit();
     });
 })
