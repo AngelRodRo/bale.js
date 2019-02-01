@@ -1,9 +1,9 @@
 "use strict";
 const faker = require("faker");
-const Bale = require("../index");
+const Bale = require("../src/index");
 const bale = new Bale();
 
-module.exports = bale.genSeed("users", 10, (user) =>{
+module.exports = bale.genSeed("users", 10, (user = {}) => {
     user.name = faker.name.firstName();
     user.lastname = faker.name.lastName();
     user.description = faker.lorem.paragraph();
