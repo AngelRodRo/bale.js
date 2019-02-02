@@ -1,6 +1,6 @@
 "use strict";
 const faker = require("faker");
-const Bale = require("../src/index");
+const Bale = require("../src/bale");
 const bale = new Bale();
 
 module.exports = bale.genSeed("users", 10, (user = {}) => {

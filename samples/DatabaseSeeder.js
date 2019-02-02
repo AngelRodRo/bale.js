@@ -1,6 +1,6 @@
 "use strict";
 const userSeeder = require("./UserSeeder");
-const Bale = require("../src/index");  
+const Bale = require("../src/bale");  
 const opts = {};
 
 const bale = new Bale();

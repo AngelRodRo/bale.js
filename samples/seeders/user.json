@@ -1,0 +1,8 @@
+{
+    "name": "User",
+    "properties" : {
+        "firstName": "string",
+        "lastName": "string"
+    },
+    "count": 5
+}
