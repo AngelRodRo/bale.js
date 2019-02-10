@@ -2,7 +2,9 @@
     "name": "User",
     "properties" : {
         "firstName": "string",
-        "lastName": "string"
+        "lastName": "string",
+        "phone": "string",
+        "address": "string"
     },
-    "count": 5
+    "count": 20
 }
