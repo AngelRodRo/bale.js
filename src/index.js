@@ -1,68 +1,72 @@
-"use strict";
 
-class Bale {
-    constructor() {
-        this.names = []; 
-        this.relations = [];
-        this.seeders = [];
-        this.name = "";
-        this.dbw = "";
-        this.generators = []
-        
-        this.use = this.use.bind(this);
-        this.seed = this.seed.bind(this);
-        this.genSeed = this.genSeed.bind(this);
-        this.exports = this.exports.bind(this);
-        
-        this.dfPK = "_id";
+require("colors");
 
-        this.dbDriver = {};
-    }
+const fs = require("fs");
+const path = require("path");
+const Bale = require("../src/bale");
 
-    connect({driver = "mongo", ...connectionArgs}) {
-        const DBDriver = require(`./drivers/${driver.toLowerCase()}`);
-        this.dbDriver = new DBDriver({driver, ...connectionArgs});
-        return this.dbDriver.connect();
-    }
-
-    use(seeder) {
-        this.seeders.push(seeder);
-    }
-
-    async seed() {
-        for (const seeder of this.seeders) {
-            for (const data of seeder.data) {
-                await this.createGenerator(seeder.name, data); 
-            }
-        }
-        console.log("Seeder completed!");
-    }
-
-    genSeed(name, count, documentCb) {
-        const fakeData = [];
-
-        for (let i = 0; i < count; i++) {
-            const obj = documentCb();
-            fakeData.push(obj);
-        }
-
-        return {
-            name,
-            data: fakeData
-        };
-    }
-
-    async createGenerator(modelName, data) {
-        const result = await this.dbDriver.insert(modelName, data);
-        return result.insertedIds[0];
-    }
-
-    exports() {
-        return {
-            name: this.name,
-            seeds : this.seeds
-        }
+function help() {
+    if(process.argv.includes("-h")) {
+        const helpInfo = `
+        Options:
+            
+        -i      Override directory for seeders
+        `;
+        console.log(`\n\n${helpInfo.trim()}\n`);
+        return true;
     }
 }
 
-module.exports = Bale;
+function getSeedersPath() {
+    const currentSeederDir = path.join(process.cwd(), "./seeders") ;
+    const defaultSeedersDir = path.join(__dirname, "../samples/seeders");
+    let argSeederDir;
+    const index = process.argv.indexOf("-i");
+    if (index >= 0) {
+        const valueSeeder = process.argv[index + 1];
+        if (!valueSeeder) {
+            console.log("Seeder path not found !".red);
+            return;
+        }
+        argSeederDir = path.join(process.cwd(), valueSeeder);
+    }
+    
+    return process.env.NODE_ENV !== "development"? (argSeederDir || currentSeederDir) : defaultSeedersDir;
+}
+
+function getOptions() {
+    const optionsPath = path.join(process.cwd(), "bale.config.json");
+    try {
+        const options = require(optionsPath);
+        return options;
+    } catch (error) {
+        return {};        
+    }
+}
+
+(function () {
+
+    if (help()) {
+        return;
+    }
+
+    const seedersPath = getSeedersPath();
+    fs.readdir(seedersPath, function (err, files) {
+        if (err) {
+            console.log("Seeders not found !".red);
+            return;
+        }
+        const bale = new Bale();
+        const options = getOptions();
+        bale.connect(options)
+        .then(function () {
+            for (const file of files) {
+                const seeder = require(`${seedersPath}/${file}`);
+                bale.use(seeder);
+            }
+            return bale.run().then(() => console.log('Seeder completed!'.green));
+        })
+        .catch(e => console.log(e.red))
+        .then(process.exit)
+    });
+})()

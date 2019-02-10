@@ -17,6 +17,10 @@ class Driver {
 
     }
 
+    errorHandler() {
+        
+    }
+
 
 }
 
